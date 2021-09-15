@@ -38,22 +38,23 @@ def make_list_of_unique_words(text_source):
 
 def show_variants_of_warp(text_source):
     d = ['а', 'у', 'о', 'и', 'э', 'ы',
-         'ю', 'е', 'ё', 'А', 'У', 'О',
-         'И', 'Э', 'Ы', 'Ю', 'Е', 'Ё']
+         'ю', 'я', 'ё', 'e', 'А', 'У',
+         'О', 'И', 'Э', 'Ы',
+         'Ю', 'Я', 'Ё', 'E']
     for i in range(len(text_source)):
         # проверка наличия трех букв в слове
-        if len(text_source[i]) < 3 and text_source.count(d[i]) < 2:
-            for i in range(len(text_source)):
-                j = 0
-                while j <= len(text_source[i]):
-                    if text_source[j, j + 2].count('ъ') == 1 and text_source[j, j + 2].count('ь') == 1:
-                        j += 2
-                    for i in range(len(d)):
-                        if 0 < text_source[j, j + 2].count(d[i]) < 2:
-                            print(f'{text_source[j, j + 2]} - {text_source[len(text_source[i], -1)]}')
-                            j += 2
-        else:
-            print(f'Слово {text_source[i]} не имеет вариантов переноса!')
+        if len(text_source[i]) >= 3:
+            counter = 0
+            for j in range(len(d)):
+                counter += text_source[i].count(d[j])
+                # проверка наличия двух слогов в слове
+            if counter >= 2:
+                print(f"Для слова '{text_source[i]}':")
+                k = 0
+                while k < len(text_source[i]) - 2:
+                    temp = text_source[i]
+                    print(f"{temp[0: k + 2]}-{temp[k + 2:]}")
+                    k += 2
 
 
 def main():
