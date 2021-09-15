@@ -41,6 +41,7 @@ def show_variants_of_warp(text_source):
          'ю', 'я', 'ё', 'e', 'А', 'У',
          'О', 'И', 'Э', 'Ы',
          'Ю', 'Я', 'Ё', 'E']
+    warp = False
     for i in range(len(text_source)):
         # проверка наличия трех букв в слове
         if len(text_source[i]) >= 3:
@@ -55,9 +56,20 @@ def show_variants_of_warp(text_source):
                     temp = text_source[i]
                     if temp[k + 2:].count('ь') or temp[k + 2:].count('ъ'):
                         k += 1
+                    # если перенос 1 символа то говорим что нету вариантов и выход из цикла
+                    elif len(temp[k + 2:]) == 1:
+                        print(f"Для слова '{text_source[i]}' нет варианта переносов!")
+                        break
+                    # если после переноса не останется хотябы одной гласное буквы пропуск
+                    elif warp == False:
+                        for i in (len(d)):
+                            
+                        break
                     else:
-                        print(f"{temp[0 : k + 2]}-{temp[k + 2:]}")
+                        print(f"{temp[0: k + 2]}-{temp[k + 2:]}")
                         k += 2
+            else:
+                print(f"Для слова '{text_source[i]}' нет варианта переносов!")
 
 
 def main():
