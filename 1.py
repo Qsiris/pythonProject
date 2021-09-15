@@ -53,8 +53,11 @@ def show_variants_of_warp(text_source):
                 k = 0
                 while k < len(text_source[i]) - 2:
                     temp = text_source[i]
-                    print(f"{temp[0: k + 2]}-{temp[k + 2:]}")
-                    k += 2
+                    if temp[k + 2:].count('ь') or temp[k + 2:].count('ъ'):
+                        k += 1
+                    else:
+                        print(f"{temp[0 : k + 2]}-{temp[k + 2:]}")
+                        k += 2
 
 
 def main():
