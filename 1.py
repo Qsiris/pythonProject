@@ -1,14 +1,15 @@
 # 2. Имеется файл с текстом на русском языке.
 # Дать варианты переноса всех слов.
 # Перенос возможен по следующим правилам:
-# 1) переносятся либо остаются в конце строки не менее двух символов;
-# 2) невозможен перенос перед буквами 'ь' и 'ъ';
-# 3) слово должно иметь не менее двух слогов;
+# 1) переносятся либо остаются в конце строки не менее двух символов;   +
+# 2) невозможен перенос перед буквами 'ь' и 'ъ';                        +
+# 3) слово должно иметь не менее двух слогов;                           +
 # 4) в оставшейся и переносимой частях слова должны быть гласные буквы.
+
 
 def input_from_file(filename):
     # открытие файла и чтение из него
-    f = open("1.txt", "r")
+    f = open(filename, "r")
     text_source = f.read()
     f.close()
     return text_source
@@ -16,7 +17,7 @@ def input_from_file(filename):
 
 def clean_input(text_source):
     # создание алфавита для удаления лишнего из введенных данных
-    d = [".", ",", ";", ":", "?", "!", "-"]
+    d = [".", ",", ";", ":", "?", "!", "-", "(", ")", "...", '"', "«", "»", "-", "—"]
     # удаление лишних знаков из слов
     for i in range(len(d)):
         text_source = text_source.replace(d[i], "")
@@ -36,41 +37,57 @@ def make_list_of_unique_words(text_source):
     return output
 
 
+def check_len_two(word1, word2):
+    return len(word1) >= 2 and len(word2) >= 2
+
+
+def check_hard_and_soft_sign(word):
+    d = ['ь', 'ъ', 'Ъ', 'Ь']
+    for i in range(len(d)):
+        if word.count(d[i]) >= 1:
+            return True
+    return False
+
+
+def check_two_syllables(word):
+    count = 0
+    vowel_list = ['А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я',
+                  'а', 'е', 'ё', 'и', 'о', 'у', 'ы', 'э', 'ю', 'я']
+
+    for i in range(len(word)):
+        for j in range(len(vowel_list)):
+            if word[i].count(vowel_list[j]) >= 1:
+                count += 1
+
+    if count >= 2:
+        return True
+    else:
+        return False
+
+
 def show_variants_of_warp(text_source):
-    d = ['а', 'у', 'о', 'и', 'э', 'ы',
-         'ю', 'я', 'ё', 'e', 'А', 'У',
-         'О', 'И', 'Э', 'Ы',
-         'Ю', 'Я', 'Ё', 'E']
+    checked = False
+    count = 1
     for i in range(len(text_source)):
-        # проверка наличия трех букв в слове
-        if len(text_source[i]) >= 3:
-            counter = 0
-            for j in range(len(d)):
-                counter += text_source[i].count(d[j])
-                # проверка наличия двух слогов в слове
-            if counter >= 2:
-                print(f"Для слова '{text_source[i]}':")
-                k = 0
-                while k < len(text_source[i]) - 2:
-                    temp = text_source[i]
-                    if temp[k + 2:].count('ь') or temp[k + 2:].count('ъ'):
-                        k += 1
-                    # если перенос 1 символа то говорим что нету вариантов и выход из цикла
-                    elif len(temp[k + 2:]) == 1:
-                        print(f"Для слова '{text_source[i]}' нет варианта переносов!")
-                        break
-                    # если после переноса не останется хотябы одной гласное буквы пропуск
-                    else:
-                        print(f"{temp[0: k + 2]}-{temp[k + 2:]}")
-                        k += 2
+        temp = text_source[i]
+        print(f"Для слова {temp}:")
+        for k in range(len(temp) - 2) :
+            checked = check_len_two(temp[0: k + 2], temp[k + 2: len(temp)])
+            checked = check_two_syllables(temp)
+            checked = check_two_syllables(temp)
+            if checked:
+                print(f"{temp[0: k + 2]}-{temp[k + 2: len(temp)]}")
+                k += 2
             else:
-                print(f"Для слова '{text_source[i]}' нет вариантов переносов!")
+                k += 1
+            count += 1
+        count = 1
 
 
 def main():
     text_source = input_from_file('1.txt')
     text_source = clean_input(text_source)
-    text_source = make_list_of_unique_words(text_source)
+    make_list_of_unique_words(text_source)
     show_variants_of_warp(text_source)
 
 
